@@ -112,13 +112,13 @@ section{padding:clamp(56px,8vw,104px) 0}
 /* Takes */
 .takes{display:grid;gap:clamp(40px,6vw,72px)}
 .take{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,52px);align-items:center}
-.take:nth-child(even) .media{order:2}
+.take:nth-child(even) > .media,.take:nth-child(even) > .gallery{order:2}
 .media{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;aspect-ratio:4/3;display:grid;place-items:center;padding:clamp(14px,2.5vw,28px)}
 .media{position:relative}
 .media img{position:absolute;inset:clamp(14px,2.5vw,28px);width:calc(100% - 2*clamp(14px,2.5vw,28px));height:calc(100% - 2*clamp(14px,2.5vw,28px));object-fit:contain;filter:drop-shadow(0 14px 22px rgba(31,20,40,.28));transition:transform .35s ease}
 .media.full{padding:0;aspect-ratio:16/9;align-self:center}
 .media.full img{inset:0;width:100%;height:100%;object-fit:cover;filter:none}
-.take:hover .media img{transform:scale(1.025)}
+.take:hover .media:not(.browser) img{transform:scale(1.025)}
 .media.stack{position:relative}
 .media.stack img{inset:auto;width:78%;height:auto}
 .media.stack img:first-child{top:9%;left:5%}
@@ -135,9 +135,11 @@ section{padding:clamp(56px,8vw,104px) 0}
 .link{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;border-bottom:2px solid var(--lilac);padding-bottom:2px}
 .link:hover{color:var(--lilac)}
 .link svg{width:14px;height:14px}
-@media (max-width:820px){.take{grid-template-columns:1fr}.take:nth-child(even) .media{order:0}}
+@media (max-width:820px){.take{grid-template-columns:1fr}.take:nth-child(even) > .media,.take:nth-child(even) > .gallery{order:0}}
 
 
+.about-text{max-width:68ch;margin:0 0 18px;font-size:clamp(17px,1.5vw,19px);line-height:1.7}
+.about-text + .about{margin-top:clamp(28px,4vw,44px)}
 /* Experience */
 .jobs{list-style:none;margin:0;padding:0;display:grid}
 .jobs > li{display:grid;grid-template-columns:180px 1fr;gap:clamp(16px,3vw,40px);padding:clamp(22px,3vw,32px) 0;border-top:1px solid var(--line)}
@@ -158,6 +160,35 @@ section{padding:clamp(56px,8vw,104px) 0}
 .certs b{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
 .certs small{color:var(--muted);font-size:14px}
 
+
+/* Browser-frame scroll preview (SIPANDU) */
+.media.browser{padding:0;display:flex;align-items:stretch;place-items:stretch;flex-direction:column;background:var(--card);aspect-ratio:4/3.2}
+.media.browser .chrome{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+.media.browser .chrome i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.media.browser .chrome span{margin-left:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+.media.browser .chrome .hint{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:10px;color:var(--lilac);letter-spacing:.04em}
+.media.browser .viewport{position:relative;flex:1;overflow:hidden}
+.media.browser .viewport img{position:static;inset:auto;width:100%;height:auto;filter:none;transform:translateY(0);transition:transform 9s cubic-bezier(.45,0,.55,1)}
+.media.browser:hover .viewport img,.media.browser:focus-visible .viewport img{transform:translateY(calc(-100% + var(--vh,300px)))}
+@media (hover:none){
+  .media.browser .chrome .hint{font-size:0}
+  .media.browser .chrome .hint::after{content:"↕ geser";font-size:10px}
+  .media.browser .viewport{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .media.browser .viewport img{transition:none;transform:none!important}
+}
+
+
+/* Radify gallery */
+.gallery{display:grid;gap:10px;min-width:0}
+.media.shots{aspect-ratio:auto}
+.media.shots .shot{position:relative;aspect-ratio:1200/747;background:#fff}
+.media.shots .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:none;transition:opacity .2s}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{font:500 13px/1 var(--body);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s}
+.tabs button:hover{color:var(--ink);border-color:var(--lilac)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (max-width:620px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.tabs::-webkit-scrollbar{display:none}.tabs button{flex:0 0 auto;font-size:12px}}
+
 /* Contact */
 .contact{background:var(--ink);color:var(--paper);padding:clamp(64px,9vw,120px) 0 40px}
 .contact .big{font-size:clamp(52px,10vw,132px);font-weight:800;letter-spacing:-.045em;line-height:.88}
@@ -175,6 +206,66 @@ section{padding:clamp(56px,8vw,104px) 0}
 @keyframes rise{from{transform:translateY(14px)}to{transform:none}}
 .hero h1,.hero .lede,.cta,.portrait{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
 .hero .lede{animation-delay:.08s}.cta{animation-delay:.14s}.portrait{animation-delay:.04s}
+
+/* ---------- Mobile polish ---------- */
+.mnav{display:none}
+@media (max-width:620px){
+  body{font-size:16px}
+  .bar .wrap{height:auto;padding-top:10px;padding-bottom:0;flex-direction:column;align-items:stretch;gap:8px}
+  .bar .rec{justify-content:center}
+  .bar nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding-bottom:10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .bar nav::-webkit-scrollbar{display:none}
+  .bar nav a{flex:0 0 auto;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:11px}
+  section[id]{scroll-margin-top:96px}
+
+  .hero{padding-top:28px}
+  .hero .wrap{gap:20px;text-align:center}
+  .portrait{width:min(62vw,240px);justify-self:center;margin:12px 0 4px}
+  .portrait::after{inset:-8px}
+  .portrait figcaption{left:50%;bottom:-12px;transform:translateX(-50%);white-space:nowrap;font-size:10px}
+  .hero h1{font-size:clamp(46px,14vw,64px)}
+  .hero .lede{margin-top:18px;font-size:15.5px;line-height:1.65}
+  .cta{justify-content:center;margin:22px 0 28px}
+  .cta .btn{flex:1 1 0;justify-content:center;padding:12px 14px}
+  .slate{text-align:left}
+  .slate div{padding:12px 12px}
+  .slate strong{font-size:17px}
+
+  section{padding:48px 0}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:4px;padding-bottom:12px;margin-bottom:24px}
+  .sec-head h2{font-size:32px}
+  .about .block+.block{margin-top:26px}
+  .about-text{font-size:16px;line-height:1.7}
+  .chips{gap:7px}
+  .chips li{padding:6px 11px;font-size:13.5px}
+  .timeline li{padding:13px 0}
+  .timeline .when{font-size:11.5px}
+
+  .jobs > li{padding:20px 0}
+  .jobs h3{font-size:21px}
+  .jobs .org{font-size:14.5px;margin:4px 0 10px}
+  .jobs ul{font-size:15px;gap:5px}
+
+  .certs{grid-template-columns:1fr;gap:0;border-top:1px solid var(--line)}
+  .certs a{border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;padding:12px 2px;display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:2px}
+  .certs a:hover{transform:none}
+  .certs b{font-size:16px;grid-column:1;grid-row:1}
+  .certs small{font-size:13px;grid-column:1;grid-row:2}
+  .certs .mono{grid-column:2;grid-row:1;align-self:center;white-space:nowrap}
+
+  .takes{gap:44px}
+  .take{gap:16px}
+  .media{aspect-ratio:16/11;border-radius:12px}
+  .take h3{font-size:26px;margin-bottom:10px}
+  .take p{font-size:15.5px}
+  .stat strong{font-size:32px}
+
+  .contact{padding:56px 0 32px}
+  .contact .big{font-size:clamp(44px,13vw,60px)}
+  .contact p{font-size:16px;margin:18px 0 26px}
+  .contact-list > *{padding:14px 0}
+  .foot{margin-top:32px;font-size:10.5px}
+}
 </style>
 </head>
 <body>
@@ -198,7 +289,7 @@ section{padding:clamp(56px,8vw,104px) 0}
       <div>
         <p class="mono" style="color:var(--muted);margin:0 0 18px">Halo! Perkenalkan</p>
         <h1>Rohadatul <span>Aesy</span></h1>
-        <p class="lede"><b>Fresh graduate Sistem Informasi</b> dari Nusa Putra University dengan minat di bidang <b>administrasi, data entry, system analyst, dan UI/UX design</b>. Berpengalaman sebagai admin dan kasir, magang di Badan Pusat Statistik, serta merancang antarmuka web dari wireframe hingga mockup. Berlatar belakang multimedia, teliti terhadap detail, kreatif, dan nyaman bekerja sendiri maupun dalam tim.</p>
+        <p class="lede"><b>Fresh graduate Sistem Informasi</b> dari Nusa Putra University. Fokus di bidang <b>administrasi, data entry, system analyst, dan UI/UX design</b>.</p>
         <div class="cta">
           <a class="btn solid" href="https://www.linkedin.com/in/rohadatul-aesy-a93628286/" target="_blank" rel="noopener">LinkedIn
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
@@ -223,6 +314,8 @@ section{padding:clamp(56px,8vw,104px) 0}
   <section id="tentang">
     <div class="wrap">
       <div class="sec-head"><h2>Tentang saya</h2><span class="mono">Profil</span></div>
+      <p class="about-text">Fresh Graduate Jurusan Sistem Informasi yang memiliki minat dan keahlian di bidang Administrasi, Data Entry, Sistem Analyst serta UI/UX Design. Berpengalaman sebagai Admin dan Kasir, dengan kemampuan dalam pengelolaan administrasi, entry dan validasi data, pengecekan kesesuaian IMEI dengan stok barang masuk, hingga manajemen transaksi keuangan secara akurat.</p>
+      <p class="about-text">Memiliki pengalaman magang dalam bidang Sistem Analyst dengan terlibat dalam analisis kebutuhan sistem, pengumpulan dan pengolahan informasi, serta perancangan alur sistem. Selain itu, memiliki keahlian dalam perancangan UI/UX website melalui pembuatan wireframe, mockup, dan user flow. Terbiasa bekerja dengan sistem informasi, teliti terhadap detail, kreatif, dan mampu bekerja secara individu maupun tim.</p>
       <div class="about">
         <div>
           <div class="block">
@@ -230,36 +323,35 @@ section{padding:clamp(56px,8vw,104px) 0}
             <ul class="chips accent">
               <li>Administrasi</li>
               <li>Data Entry</li>
-              <li>System Analyst</li>
+              <li>Sistem Analyst</li>
               <li>UI/UX Design</li>
-              <li>Social Media Specialist</li>
-              <li>Social Media Analysis</li>
             </ul>
           </div>
           <div class="block">
             <h3>Keahlian</h3>
             <ul class="chips">
-              <li>Entry &amp; validasi data</li>
-              <li>Administrasi keuangan</li>
-              <li>Analisis kebutuhan sistem</li>
-              <li>Wireframe &amp; mockup</li>
-              <li>User flow</li>
-              <li>Desain responsif</li>
-              <li>Konsistensi visual</li>
-              <li>Editing video &amp; fotografi</li>
+              <li>Data Entry</li>
+              <li>Administrasi</li>
+              <li>Sistem Analyst</li>
+              <li>Social Media Specialist</li>
+              <li>Social Media Analysis</li>
+              <li>User Interface (UI) Design</li>
+              <li>Konsistensi Visual</li>
+              <li>Desain Responsif</li>
               <li>Kepemimpinan</li>
-              <li>Manajemen waktu</li>
-              <li>Kerja tim</li>
+              <li>Manajemen Waktu</li>
+              <li>Kerja Tim</li>
             </ul>
           </div>
           <div class="block">
             <h3>Bahasa &amp; tools</h3>
             <ul class="chips">
               <li>Bahasa Indonesia</li>
-              <li>English (dasar)</li>
+              <li>English (Dasar)</li>
               <li>Microsoft Office</li>
-              <li>Microsoft Excel</li>
-              <li>Canva</li>
+              <li>Figma</li>
+              <li>Draw.io</li>
+              <li>StarUML</li>
             </ul>
           </div>
         </div>
@@ -382,15 +474,48 @@ section{padding:clamp(56px,8vw,104px) 0}
 
   <section id="karya" style="padding-top:0">
     <div class="wrap">
-      <div class="sec-head"><h2>Karya pilihan</h2><span class="mono">5 take</span></div>
+      <div class="sec-head"><h2>Karya pilihan</h2><span class="mono">7 take</span></div>
       <div class="takes">
+
+        <article class="take">
+          <div class="media browser" tabindex="0" aria-label="Desain halaman SIPANDU, arahkan kursor untuk menggulir">
+            <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>sipandu · bps kab. sukabumi</span><em class="hint">↕ arahkan kursor</em></div>
+            <div class="viewport"><img src="assets/sipandu.webp" alt="Desain lengkap halaman beranda website SIPANDU" width="900" height="3573"></div>
+          </div>
+          <div>
+            <div class="take-meta mono"><span class="no">Take 01</span><span>UI/UX · BPS Kab. Sukabumi</span></div>
+            <h3>SIPANDU</h3>
+            <p>Sistem Informasi Pantauan Data Terpadu, website untuk memantau alur dokumen survei secara real-time, dari mitra, kabupaten, hingga proses pengolahan IPDS. Saya merancang UI/UX-nya selama magang di Badan Pusat Statistik Kabupaten Sukabumi melalui wireframe, mockup, prototipe interaktif, dan user flow diagram.</p>
+            <p>Halaman beranda memuat status dokumen per Kode NKS (sudah, belum, non respon), filter jenis survei, feed Instagram BPS, pusat bantuan FAQ, dan langganan informasi.</p>
+            <ul class="facts"><li>Figma</li><li>Wireframe</li><li>Mockup</li><li>Prototipe</li><li>User flow</li></ul>
+            <a class="link" href="https://www.figma.com/design/KnkaTp5UFblcykfa69mc0y/SIPANDU-BPS?node-id=1038-6184&amp;t=LUvY0isezO7zBqsF-1" target="_blank" rel="noopener">Lihat desain di Figma <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </article>
+
+
+        <article class="take">
+          <div class="gallery">
+            <div class="media browser shots">
+              <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>radify · sistem radius</span></div>
+              <div class="shot"><img id="radify-shot" src="assets/radify-dashboard.webp" alt="Desain halaman Dashboard Radify" width="1200" height="747"></div>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Halaman desain Radify"><button type="button" role="tab" id="rtab-dashboard" aria-selected="true" data-src="assets/radify-dashboard.webp" data-alt="Desain halaman Dashboard Radify">Dashboard</button><button type="button" role="tab" id="rtab-login" aria-selected="false" data-src="assets/radify-login.webp" data-alt="Desain halaman Login Radify">Login</button><button type="button" role="tab" id="rtab-data-user" aria-selected="false" data-src="assets/radify-data-user.webp" data-alt="Desain halaman Data User Radify">Data User</button><button type="button" role="tab" id="rtab-package" aria-selected="false" data-src="assets/radify-package.webp" data-alt="Desain halaman Package Radify">Package</button><button type="button" role="tab" id="rtab-sessions" aria-selected="false" data-src="assets/radify-sessions.webp" data-alt="Desain halaman Sessions Radify">Sessions</button><button type="button" role="tab" id="rtab-income" aria-selected="false" data-src="assets/radify-income.webp" data-alt="Desain halaman Income Radify">Income</button></div>
+          </div>
+          <div>
+            <div class="take-meta mono"><span class="no">Take 02</span><span>UI Design · Sistem RADIUS</span></div>
+            <h3>Radify</h3>
+            <p>Desain antarmuka dashboard admin untuk sistem RADIUS, yaitu pengelolaan jaringan internet dan pelanggan. Admin bisa memantau pengguna aktif dan online, pemakaian bandwidth, paket terpopuler, serta pelanggan dengan pemakaian terbesar.</p>
+            <p>Terdiri dari 6 halaman: login, dashboard, data user, paket internet, sesi aktif (dengan IP, MAC address, NAS, dan tombol disconnect), serta income lengkap dengan grafik, invoice, dan ekspor PDF/Excel.</p>
+            <ul class="facts"><li>Figma</li><li>Dashboard admin</li><li>6 halaman</li><li>Data visualization</li></ul>
+          </div>
+        </article>
 
         <article class="take">
           <a class="media full" href="https://youtu.be/P8LR_9tBWmA?si=h_b_pX-gXaqKiSS-" target="_blank" rel="noopener" aria-label="Tonton video klip King of Red di YouTube">
             <img src="assets/video-king-of-red.webp" alt="Thumbnail video klip King of Red" width="1200" height="675">
           </a>
           <div>
-            <div class="take-meta mono"><span class="no">Take 01</span><span>Produksi video</span></div>
+            <div class="take-meta mono"><span class="no">Take 03</span><span>Produksi video</span></div>
             <h3>Video Klip “King of Red”</h3>
             <p>Sebagai Produser, saya mengatur jadwal agar proyek berjalan maksimal, mengelola keuangan, dan mengawasi pekerjaan seluruh anggota tim dari awal hingga video klip ini selesai.</p>
             <ul class="facts"><li>Produser</li><li>Manajemen waktu</li><li>Anggaran</li><li>Film terbaik pilihan sosmed 2022</li></ul>
@@ -403,7 +528,7 @@ section{padding:clamp(56px,8vw,104px) 0}
             <img src="assets/audit-iso27001.webp" alt="Sampul buku laporan Audit Sistem Informasi Orely Studio" width="900" height="900">
           </div>
           <div>
-            <div class="take-meta mono"><span class="no">Take 02</span><span>Audit SI · Orely Studio</span></div>
+            <div class="take-meta mono"><span class="no">Take 04</span><span>Audit SI · Orely Studio</span></div>
             <h3>Audit Sistem Informasi</h3>
             <p>Buku laporan audit yang mengevaluasi keamanan informasi Orely Studio: profil perusahaan, identifikasi aset digital utama, dan penilaian risiko terhadap ancaman seperti gangguan listrik dan peretasan. Rekomendasinya meliputi pelatihan keamanan, audit sistem informasi, dan dokumentasi peran keamanan informasi, agar pengelolaan data aman, efisien, dan sesuai standar.</p>
             <ul class="facts"><li>ISO/IEC 27001:2013</li><li>Penilaian risiko</li><li>Aset digital</li></ul>
@@ -416,7 +541,7 @@ section{padding:clamp(56px,8vw,104px) 0}
             <img src="assets/laporan-waterfall.webp" alt="Sampul laporan sistem penjualan berbasis web Supermarket Simpang Tiga" width="566" height="800">
           </div>
           <div>
-            <div class="take-meta mono"><span class="no">Take 03</span><span>Analisis &amp; perancangan</span></div>
+            <div class="take-meta mono"><span class="no">Take 05</span><span>Analisis &amp; perancangan</span></div>
             <h3>Sistem Penjualan Berbasis Web</h3>
             <p>Laporan pengembangan sistem penjualan untuk Supermarket Simpang Tiga dengan metode Waterfall, untuk meningkatkan efisiensi operasional lewat fitur login, dashboard, manajemen barang, transaksi, dan laporan penjualan. Dilengkapi diagram UML (use case, activity, sequence, class), DFD, dan ERD.</p>
             <ul class="facts"><li>Waterfall</li><li>UML</li><li>DFD</li><li>ERD</li></ul>
@@ -429,7 +554,7 @@ section{padding:clamp(56px,8vw,104px) 0}
             <img src="assets/jurnal-spk-saw.webp" alt="Halaman pertama jurnal Sistem Pendukung Keputusan pemilihan tempat kos" width="618" height="800">
           </div>
           <div>
-            <div class="take-meta mono"><span class="no">Take 04</span><span>Jurnal · SPK</span></div>
+            <div class="take-meta mono"><span class="no">Take 06</span><span>Jurnal · SPK</span></div>
             <h3>Sistem Pendukung Keputusan Pemilihan Kos</h3>
             <p>Jurnal tentang SPK pemilihan tempat kos untuk mahasiswa di Cibolang dengan metode Simple Additive Weighting (SAW), berdasarkan kriteria harga, fasilitas, jarak, kebersihan, dan keamanan. Metode SAW terbukti efektif mempermudah pengambilan keputusan mahasiswa.</p>
             <div class="stat"><strong>0,805</strong><span>Nilai preferensi tertinggi, diraih Kos Pak Agus sebagai pilihan terbaik</span></div>
@@ -444,7 +569,7 @@ section{padding:clamp(56px,8vw,104px) 0}
             <img src="assets/portal-berita.webp" alt="Tampilan halaman portal berita yang dipublikasikan" width="1200" height="563">
           </div>
           <div>
-            <div class="take-meta mono"><span class="no">Take 05</span><span>Konten digital</span></div>
+            <div class="take-meta mono"><span class="no">Take 07</span><span>Konten digital</span></div>
             <h3>Publikasi Berita</h3>
             <p>Membuat dan mengelola konten berita yang informatif dan relevan di platform digital: mengumpulkan data dari berbagai sumber, menyusunnya menjadi narasi yang menarik, lalu mempublikasikannya lewat dashboard manajemen konten dan media sosial, agar informasi terkini sampai ke audiens dengan cepat dan mudah dipahami.</p>
             <ul class="facts"><li>Penulisan berita</li><li>CMS</li><li>Media sosial</li></ul>
@@ -472,5 +597,23 @@ section{padding:clamp(56px,8vw,104px) 0}
   </div>
 </footer>
 
+<script>
+(function(){
+  function fit(){document.querySelectorAll('.media.browser').forEach(function(m){var v=m.querySelector('.viewport');if(v)m.style.setProperty('--vh',v.clientHeight+'px');});}
+  window.addEventListener('resize',fit);window.addEventListener('load',fit);fit();
+})();
+</script>
+<script>
+(function(){
+  var img=document.getElementById('radify-shot'); if(!img) return;
+  var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  tabs.forEach(function(t){ var pre=new Image(); pre.src=t.dataset.src;
+    t.addEventListener('click',function(){
+      tabs.forEach(function(x){x.setAttribute('aria-selected','false')});
+      t.setAttribute('aria-selected','true'); img.src=t.dataset.src; img.alt=t.dataset.alt;
+    });
+  });
+})();
+</script>
 </body>
 </html>
